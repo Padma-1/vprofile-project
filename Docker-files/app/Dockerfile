@@ -7,6 +7,8 @@ RUN cd vprofile-project && git checkout local && mvn install
 
 # Stage 2: Copy artifact into Tomcat image
 FROM tomcat:10-jdk21
+LABEL "Project"="Vprofile"
+LABEL "Author"="Padma"
 RUN rm -rf /usr/local/tomcat/webapps/* #removing the default application in a Tomcat image
 COPY --from=BUILD_IMAGE vprofile-project/target/vprofile-v2.war /usr/local/tomcat/webapps/ROOT.war
 
