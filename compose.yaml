@@ -1,0 +1,25 @@
+services:
+   vprodb:
+      build:
+         context: ./Docker-files/db #path of Dockerfile to build the image
+      image: upadma/vprofiledb #upadma is account name in DockerHub and vprofiledb will be the image name
+      container_name: vprodb #we need match these names that were there in application.properties
+      ports:
+         - "3306:3306"
+      volumes:
+         - vprodbdata:/var/lib/mysql # vprodbdata will be host volume and /var/lib/mysql is the container volume name
+      environment:
+         - MYSQL_ROOT_PASSWORD=vprodbpass
+
+   vprocache01:
+      image: upadma/vprofiledb #upadma is account name in DockerHub and vprofiledb will be the image name
+      container_name: vprodb #we need match these names that were there in application.properties
+      ports:
+         - "3306:3306"
+      volumes:
+         - vprodbdata:/var/lib/mysql # vprodbdata will be host volume and /var/lib/mysql is the container volume name
+      environment:
+         - MYSQL_ROOT_PASSWORD=vprodbpass  
+volumes:
+   vprodbdata: {} #curly brace means its going to be the host volume, means just a folder creating into your Docker Engine
+   vprodbdata: {}
