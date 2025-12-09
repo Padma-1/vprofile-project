@@ -12,14 +12,39 @@ services:
          - MYSQL_ROOT_PASSWORD=vprodbpass
 
    vprocache01:
-      image: upadma/vprofiledb #upadma is account name in DockerHub and vprofiledb will be the image name
+      image: memcached #official image from DockerHub
+      container_name: vprocache01
+      ports:
+         - "11211:11211"
+
+   vpromq01:
+      image: rabbitmq
       container_name: vprodb #we need match these names that were there in application.properties
       ports:
-         - "3306:3306"
+         - "5672:5672"
+      environment: #below var values from application.properties file
+         - RABBITMQ_DEFAULT_USER=guest
+         - RABBITMQ_DEFAULT_PASS=guest
+
+   vproapp:
+      build:
+         context: ./Docker-files/app
+      image: upadma/vprofileapp
+      container_name: vprodapp
+      ports:
+         - "8080:8080"
       volumes:
-         - vprodbdata:/var/lib/mysql # vprodbdata will be host volume and /var/lib/mysql is the container volume name
-      environment:
-         - MYSQL_ROOT_PASSWORD=vprodbpass  
+         - vproappdata:/usr/local/tomcat/webapps
+
+   vproweb:
+      build:
+         context: ./Docker-files/web
+      image: upadma/vprofileweb
+      container_name: vproweb
+      ports:
+         - "80:80"
+
+ 
 volumes:
    vprodbdata: {} #curly brace means its going to be the host volume, means just a folder creating into your Docker Engine
-   vprodbdata: {}
+   vproappdata: {}
