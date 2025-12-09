@@ -30,7 +30,7 @@ services:
       build:
          context: ./Docker-files/app
       image: upadma/vprofileapp
-      container_name: vprodapp
+      container_name: vproapp
       ports:
          - "8080:8080"
       volumes:
